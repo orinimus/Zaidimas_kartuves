@@ -36,16 +36,19 @@ namespace Zaidimas_kartuves
             List<string> spetiZodziai = new List<string>();
             Console.WriteLine("Žaidimas \"Kartuvės\"");
             string spejamasZodis = string.Empty;
+            string tema = TemosPasirinkimas();
 
-            if (TemosPasirinkimas() == "vardai")
+            if (tema == "vardai")
             {
                 spejamasZodis = ZodzioGeneravimas(vardai);
                 spetiZodziai.Add(spejamasZodis);
                 SpejamoZodzioGeneravimas(spejamasZodis);
                 Console.WriteLine(kartuves[0]);
+                //string raide = raidesArbaZodzioSpejimas(spejamasZodis);
+                //Console.WriteLine(raide);
 
             }
-            else if (TemosPasirinkimas() == "miestai")
+            else if (tema == "miestai")
             {
                 spejamasZodis = ZodzioGeneravimas(miestai);
                 spetiZodziai.Add(spejamasZodis);
@@ -53,7 +56,7 @@ namespace Zaidimas_kartuves
                 Console.WriteLine(kartuves[0]);
 
             }
-            else if (TemosPasirinkimas() == "valstybes")
+            else if (tema == "valstybes")
             {
                 spejamasZodis = ZodzioGeneravimas(valstybes);
                 spetiZodziai.Add(spejamasZodis);
@@ -73,6 +76,37 @@ namespace Zaidimas_kartuves
             Console.WriteLine();
             
         }
+
+        /*static string raidesArbaZodzioSpejimas(string spejamasZodis)
+        {
+            
+            Console.WriteLine("spėkite raidę arba visą žodį");
+            string spejimas = string.Empty;
+            while (false)
+            {
+                spejimas = Console.ReadLine();
+                if (!ArRaides(spejimas))
+                {
+                    Console.WriteLine("Neteisinga įvesti, prašome įvesti raidę arba visą žodį");
+                }
+            }
+            return spejimas;
+            
+
+        }
+            */
+
+
+        static bool ArRaides(string spejimas)
+        {
+            foreach (char raide in spejimas)
+            {
+                if (!Char.IsLetter(raide))
+                    return false;
+            }
+            return true;
+        }
+
 
         static void PiesinioIsvedimas(List<char> panaudotosNeteisingosRaides)
         {
