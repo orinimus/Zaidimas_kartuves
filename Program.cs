@@ -25,37 +25,53 @@ namespace Zaidimas_kartuves
 
         static void Main(string[] args)
         {
-            Kartuvės();
+            Kartuves();
 
             Console.WriteLine("------------Press any key to continue---------------");
             Console.ReadKey();
         }
 
-        static void Kartuvės()
+        static void Kartuves()
         {
+            List<string> spetiZodziai = new List<string>();
             Console.WriteLine("Žaidimas \"Kartuvės\"");
+            string spejamasZodis = string.Empty;
+
             if (TemosPasirinkimas() == "vardai")
             {
-                SpejamoZodzioGeneravimas(ZodzioGeneravimas(vardai));
+                spejamasZodis = ZodzioGeneravimas(vardai);
+                spetiZodziai.Add(spejamasZodis);
+                SpejamoZodzioGeneravimas(spejamasZodis);
+                Console.WriteLine(kartuves[0]);
+
             }
             else if (TemosPasirinkimas() == "miestai")
             {
+                spejamasZodis = ZodzioGeneravimas(miestai);
+                spetiZodziai.Add(spejamasZodis);
+                SpejamoZodzioGeneravimas(spejamasZodis);
+                Console.WriteLine(kartuves[0]);
 
-                SpejamoZodzioGeneravimas(ZodzioGeneravimas(miestai));
             }
             else if (TemosPasirinkimas() == "valstybes")
             {
+                spejamasZodis = ZodzioGeneravimas(valstybes);
+                spetiZodziai.Add(spejamasZodis);
+                SpejamoZodzioGeneravimas(spejamasZodis);
+                Console.WriteLine(kartuves[0]);
 
-                SpejamoZodzioGeneravimas(ZodzioGeneravimas(valstybes));
             }
             else
-                SpejamoZodzioGeneravimas(ZodzioGeneravimas(sportas));
+            {
+                spejamasZodis = ZodzioGeneravimas(sportas);
+                spetiZodziai.Add(spejamasZodis);
+                SpejamoZodzioGeneravimas(spejamasZodis);
+                Console.WriteLine(kartuves[0]);
+
+            }
 
             Console.WriteLine();
-            //papildomai ismesti sugeneruota zodi is 
-
-            //SpejamoZodzioGeneravimas(ZodzioGeneravimas(vardai));
-
+            
         }
 
         static void PiesinioIsvedimas(List<char> panaudotosNeteisingosRaides)
@@ -70,6 +86,7 @@ namespace Zaidimas_kartuves
 
         static void SpejamoZodzioGeneravimas(string spejamasZodis)
         {
+            Console.WriteLine($"Spėkite žodį iš {spejamasZodis.Length} raidžių");
             Console.Write("(");
             for (int i = 0; i < spejamasZodis.Length; i++)
             {
@@ -79,16 +96,9 @@ namespace Zaidimas_kartuves
             Console.WriteLine();
         }
 
-
         static string TemosPasirinkimas()
         {
-            Dictionary<int, string> tema = new Dictionary<int, string>
-            {
-                {1, "vardai" },
-                {2, "miestai" },
-                {3, "valstybes" },
-                {4, "sportas" }
-            };
+            String[] temosString = {"vardai", "miestai", "valstybes", "sportas" };
             Console.WriteLine("Prašome pasirinkti temą: 1. Vardai, 2. miestai, 3. valstybės, 4. sportas");
             int x = 0;
             int skaiciukas = 0;
@@ -105,8 +115,8 @@ namespace Zaidimas_kartuves
                 }
                 else Console.WriteLine($"neteisinga įvestis, prašome paspausti 1, 2, 3 arba 4");
             }
-            Console.WriteLine($" Jūs pasirinkote temą \"{tema[skaiciukas]}\"");
-            return tema[skaiciukas];
+            Console.WriteLine($" Jūs pasirinkote temą \"{temosString[skaiciukas-1]}\"");
+            return temosString[skaiciukas - 1];
         }
 
         
