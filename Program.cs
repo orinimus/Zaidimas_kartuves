@@ -22,6 +22,7 @@ namespace Zaidimas_kartuves
         static readonly List<string> valstybes = new List<string> { "Argentina", "Brazilija", "Meksika", "Jamaika", "Alžyras", "Albanija", "Tailandas", "Kazakstanas", "Armėnija", "Garikija" };
         static readonly List<string> sportas = new List<string> { "vandensvydis", "biatlonas", "šaškės", "penkiakovė", "maratonas", "futbolas", "beisbolas", "kriketas", "akmensvydis", "šachmatai" };
         static readonly List<char> neteisingosRaides = new List<char>();
+        static readonly List<string> bandytosRaides = new List<string>();
 
         static void Main(string[] args)
         {
@@ -37,22 +38,36 @@ namespace Zaidimas_kartuves
             Console.WriteLine("Žaidimas \"Kartuvės\"");
             string spejamasZodis = string.Empty;
             string tema = TemosPasirinkimas();
+            int sansai = 0;
 
             if (tema == "vardai")
             {
-                spejamasZodis = ZodzioGeneravimas(vardai);
-                spetiZodziai.Add(spejamasZodis);
-                SpejamoZodzioGeneravimas(spejamasZodis);
-                Console.WriteLine(kartuves[0]);
-                //string raide = raidesArbaZodzioSpejimas(spejamasZodis);
-                //Console.WriteLine(raide);
-
+                spejamasZodis = ZodzioGeneravimas(vardai); //sugeneruojam zodi is vardu saraso
+                spetiZodziai.Add(spejamasZodis); //issaugom sugeneruota zodi speliotu zodziu sarase
+                Console.WriteLine(spejamasZodis);
+                Console.WriteLine(kartuves[0]); //isvedam pradini kartuviu vaizda
+                do
+                {
+                    SpejamoZodzioVizualizacija(spejamasZodis); // zodzio "uzkodavimas" arba kitaip pradine vizualizacija                    
+                    Console.WriteLine($"Jūs jau bandėte spėti šias raides {String.Join(" ", bandytosRaides)}"); //parašome kokias raides zaidejas jau bande
+                    bandytosRaides.Add(raidesArbaZodzioSpejimas(spejamasZodis).ToUpper()); //iskvieciam spejimo metoda (ten pasitikrinam ar spejamas visas zodis) ir jeigu spejama raide, ja prisidedam prie bandytu saraso
+                    Console.WriteLine($"Test paskutine raide sarase {bandytosRaides[bandytosRaides.Count - 1]}");
+                    sansai = sansai + ZaidziamRaide(bandytosRaides[bandytosRaides.Count - 1], spejamasZodis); //iskvieciam raides suzaidimo metoda, kuriame patirkinam ar raide yra jei yra perpiesiam vizualizacija, jei nera padidinam sansu keiki
+                    Console.WriteLine(kartuves[sansai]);
+                } while (sansai < 7);
+                if (sansai == 7)
+                {
+                    Console.WriteLine("Deje, Jūs i6naudojote visus bandymus ir pralaimėjote šį žaidimą!");
+                    Console.WriteLine(kartuves[7]);
+                    ArZaisiteDarKarta();
+                }
+                
             }
             else if (tema == "miestai")
             {
                 spejamasZodis = ZodzioGeneravimas(miestai);
                 spetiZodziai.Add(spejamasZodis);
-                SpejamoZodzioGeneravimas(spejamasZodis);
+                SpejamoZodzioVizualizacija(spejamasZodis);
                 Console.WriteLine(kartuves[0]);
 
             }
@@ -60,7 +75,7 @@ namespace Zaidimas_kartuves
             {
                 spejamasZodis = ZodzioGeneravimas(valstybes);
                 spetiZodziai.Add(spejamasZodis);
-                SpejamoZodzioGeneravimas(spejamasZodis);
+                SpejamoZodzioVizualizacija(spejamasZodis);
                 Console.WriteLine(kartuves[0]);
 
             }
@@ -68,7 +83,7 @@ namespace Zaidimas_kartuves
             {
                 spejamasZodis = ZodzioGeneravimas(sportas);
                 spetiZodziai.Add(spejamasZodis);
-                SpejamoZodzioGeneravimas(spejamasZodis);
+                SpejamoZodzioVizualizacija(spejamasZodis);
                 Console.WriteLine(kartuves[0]);
 
             }
@@ -77,25 +92,85 @@ namespace Zaidimas_kartuves
             
         }
 
-        /*static string raidesArbaZodzioSpejimas(string spejamasZodis)
+        static void ZaistiZaidima()
         {
             
-            Console.WriteLine("spėkite raidę arba visą žodį");
+        }
+
+        static int ZaidziamRaide(string spejimas, string spejamasZodis)
+        {
+            if (spejamasZodis.ToUpper().Contains(spejimas.ToUpper()))
+            {
+                SpejamoZodzioVizualizacija(spejamasZodis);
+                return 0;
+            }
+            else
+            {
+                Console.WriteLine($"Raidės {spejimas}, šiame žodyje nėra");
+                SpejamoZodzioVizualizacija(spejamasZodis);
+                return 1;
+            }
+        }
+
+        static string raidesArbaZodzioSpejimas(string spejamasZodis)
+        {
             string spejimas = string.Empty;
-            while (false)
+            Console.WriteLine("spėkite raidę arba visą žodį");
+
+            int x = 0;
+            while (x != 1)
             {
                 spejimas = Console.ReadLine();
                 if (!ArRaides(spejimas))
                 {
                     Console.WriteLine("Neteisinga įvesti, prašome įvesti raidę arba visą žodį");
                 }
+                else if (spejimas.Length > 1)
+                {
+                    if (spejimas.Length != spejamasZodis.Length)
+                    {
+                        Console.WriteLine($"Jūs bandote spėti žodį, tam reikia parašyti {spejamasZodis.Length} raides, o jūs parašėte {spejimas.Length} ");
+                    }
+                    else if (spejimas == spejamasZodis)
+                    {
+                        Console.WriteLine("Sveikiname, Jūs atspėjote žodį ir laimėjote šį žaidimą!");
+                        ArZaisiteDarKarta();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Deje, Jūsų spėjimas neteisingas, Jūs pralaimėjote šį žaidimą!");
+                        Console.WriteLine(kartuves[7]);
+                        ArZaisiteDarKarta();
+                    }
+                }
+                x = 1;
             }
-            return spejimas;
-            
+            return spejimas; 
 
         }
-            */
 
+        static void ArZaisiteDarKarta()
+        {
+            Console.WriteLine("Ar bandysite dar karta?");
+            int x = 0;
+            while (x != 1)
+            {
+                string arZaisimeToliau = Console.ReadLine();
+                if (arZaisimeToliau != null && (arZaisimeToliau == "t" || arZaisimeToliau == "T"))
+                {
+                    x = 1;
+                    ZaistiZaidima();
+                }
+                else if (arZaisimeToliau != null && (arZaisimeToliau == "n" || arZaisimeToliau == "N"))
+                {
+                    break;
+                }
+                else
+                {
+                    Console.Write("Neteisinga įvestis! Prašome įvesti t/T arba n/N");
+                }
+            }
+        }
 
         static bool ArRaides(string spejimas)
         {
@@ -118,15 +193,20 @@ namespace Zaidimas_kartuves
             neteisingosRaides.Add(raide);
         }
 
-        static void SpejamoZodzioGeneravimas(string spejamasZodis)
+        static void SpejamoZodzioVizualizacija(string spejamasZodis)
         {
             Console.WriteLine($"Spėkite žodį iš {spejamasZodis.Length} raidžių");
             Console.Write("(");
-            for (int i = 0; i < spejamasZodis.Length; i++)
+            foreach (var raide in spejamasZodis)
             {
-                Console.Write(" _");
+                if (bandytosRaides.Contains(raide.ToString().ToUpper()))
+                {
+                    Console.Write($" {raide}");
+                }
+                else Console.Write(" _");
             }
             Console.Write(" )");
+
             Console.WriteLine();
         }
 
@@ -157,7 +237,7 @@ namespace Zaidimas_kartuves
         static string ZodzioGeneravimas(List<string> zodziuListas)
         {
             Random rand = new Random();
-            int listoNarioNumeris = rand.Next(0, zodziuListas.Count);
+            int listoNarioNumeris = rand.Next(0, zodziuListas.Count + 1);
             zodziuListas.RemoveAt(listoNarioNumeris);
             return zodziuListas[listoNarioNumeris];
         }
