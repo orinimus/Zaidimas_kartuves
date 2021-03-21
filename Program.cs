@@ -66,10 +66,10 @@ namespace Zaidimas_kartuves
             {
                 SpejamoZodzioVizualizacija(spejamasZodis); // zodzio "uzkodavimas" arba kitaip pradine vizualizacija                    
                 Console.WriteLine($"Jūs jau bandėte spėti šias raides: {String.Join(" ", bandytosRaides)}"); //parašome kokias raides zaidejas jau bande
+                Console.WriteLine("--------------------------------------------------------");
                 bandytosRaides.Add(raidesArbaZodzioSpejimas(spejamasZodis).ToUpper()); //iskvieciam spejimo metoda (ten pasitikrinam ar spejamas visas zodis) ir jeigu spejama raide, ja prisidedam prie bandytu saraso
                 sansai = sansai + ZaidziamRaide(bandytosRaides[bandytosRaides.Count - 1], spejamasZodis); //iskvieciam raides suzaidimo metoda, kuriame patirkinam ar raide yra jei yra perpiesiam vizualizacija, jei nera padidinam sansu kieki
-                Console.WriteLine(kartuves[sansai]);
-                Console.WriteLine("--------------------------------------------------------");
+                Console.WriteLine(kartuves[sansai]);                
             } while (sansai < 7);
             if (sansai == 7)
             {
