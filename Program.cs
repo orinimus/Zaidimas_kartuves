@@ -67,19 +67,19 @@ namespace Zaidimas_kartuves
                 SpejamoZodzioVizualizacija(spejamasZodis); // zodzio "uzkodavimas" arba kitaip pradine vizualizacija                    
                 Console.WriteLine($"Jūs jau bandėte spėti šias raides: {String.Join(" ", bandytosRaides)}"); //parašome kokias raides zaidejas jau bande
                 bandytosRaides.Add(raidesArbaZodzioSpejimas(spejamasZodis).ToUpper()); //iskvieciam spejimo metoda (ten pasitikrinam ar spejamas visas zodis) ir jeigu spejama raide, ja prisidedam prie bandytu saraso
-                sansai = sansai + ZaidziamRaide(bandytosRaides[bandytosRaides.Count - 1], spejamasZodis); //iskvieciam raides suzaidimo metoda, kuriame patirkinam ar raide yra jei yra perpiesiam vizualizacija, jei nera padidinam sansu keiki
+                sansai = sansai + ZaidziamRaide(bandytosRaides[bandytosRaides.Count - 1], spejamasZodis); //iskvieciam raides suzaidimo metoda, kuriame patirkinam ar raide yra jei yra perpiesiam vizualizacija, jei nera padidinam sansu kieki
                 Console.WriteLine(kartuves[sansai]);
+                Console.WriteLine("--------------------------------------------------------");
             } while (sansai < 7);
             if (sansai == 7)
             {
                 Console.WriteLine("Deje, Jūs išnaudojote visus bandymus ir pralaimėjote šį žaidimą!");
-                Console.WriteLine(kartuves[7]);
                 ArZaisiteDarKarta();
             }
 
         }  
 
-        static int ZaidziamRaide(string spejimas, string spejamasZodis) //reikia patikrinti
+        static int ZaidziamRaide(string spejimas, string spejamasZodis) //veikia OK
         {
             if (spejamasZodis.ToUpper().Contains(spejimas.ToUpper()))
             {
@@ -107,7 +107,7 @@ namespace Zaidimas_kartuves
                 {
                     Console.WriteLine("Neteisinga įvesti, prašome įvesti raidę arba visą žodį");
                 }
-                else if (ArRaides(spejimas) && spejimas.Length > 1)
+                else if (spejimas.Length > 1)
                 {
                     if (spejimas.Length != spejamasZodis.Length)
                     {
@@ -115,7 +115,9 @@ namespace Zaidimas_kartuves
                     }
                     else if (spejimas.ToUpper() == spejamasZodis.ToUpper())
                     {
-                        Console.WriteLine("Sveikiname, Jūs atspėjote žodį ir laimėjote šį žaidimą!");
+                        Console.WriteLine("--------------------------------------------------------");
+                        Console.WriteLine(" Sveikiname, Jūs atspėjote žodį ir laimėjote šį žaidimą!");
+                        Console.WriteLine("--------------------------------------------------------");
                         ArZaisiteDarKarta();
                     }
                     else
@@ -123,9 +125,9 @@ namespace Zaidimas_kartuves
                         Console.WriteLine("Deje, Jūsų spėjimas neteisingas, Jūs pralaimėjote šį žaidimą!");
                         Console.WriteLine(kartuves[7]);
                         ArZaisiteDarKarta();
-                    }
+                    }  
                 }
-                x = 1;
+                else x = 1;
             }
             return spejimas; 
 
@@ -169,15 +171,24 @@ namespace Zaidimas_kartuves
         {
             Console.WriteLine($"Spėkite žodį iš {spejamasZodis.Length} raidžių");
             Console.Write("(");
+            int visuRaidziuAtspejimoPatikrinimas = 0; 
             foreach (var raide in spejamasZodis)
             {
                 if (bandytosRaides.Contains(raide.ToString().ToUpper()))
                 {
                     Console.Write($" {raide}");
+                    visuRaidziuAtspejimoPatikrinimas += 1;
                 }
                 else Console.Write(" _");
             }
             Console.Write(" )");
+            if (spejamasZodis.Length == visuRaidziuAtspejimoPatikrinimas)
+            {
+                Console.WriteLine("---------------------------------------------------------------");
+                Console.WriteLine("Sveikiname, Jūs atspėjote visas raides ir laimėjote šį žaidimą!");
+                Console.WriteLine("---------------------------------------------------------------");
+                ArZaisiteDarKarta();
+            }
 
             Console.WriteLine();
         }
@@ -185,7 +196,7 @@ namespace Zaidimas_kartuves
         static string TemosPasirinkimas() //veikia OK
         {
             String[] temosString = {"vardai", "miestai", "valstybes", "sportas" };
-            Console.WriteLine("Prašome pasirinkti temą: 1. Vardai, 2. miestai, 3. valstybės, 4. sportas");
+            Console.WriteLine("Prašome pasirinkti temą: 1. Vardai, 2. Miestai, 3. Valstybės, 4. Sportas");
             int x = 0;
             int skaiciukas = 0;
             while (x != 1)
