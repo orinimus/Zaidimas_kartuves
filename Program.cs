@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Zaidimas_kartuves
 {
-    class Program
+    static class Program
     {
         static readonly Dictionary<int, string> kartuves = new Dictionary<int, string>
             {
@@ -29,7 +29,7 @@ namespace Zaidimas_kartuves
             Kartuves();
         }
 
-        static void Kartuves() //viskas OK
+        static void Kartuves() 
         {
             Console.WriteLine("Žaidimas \"Kartuvės\"");
             Console.WriteLine($"sužaisti žodžiai: {string.Join(", ",spetiZodziai)}");
@@ -79,7 +79,7 @@ namespace Zaidimas_kartuves
 
         }  
 
-        static int ZaidziamRaide(string spejimas, string spejamasZodis) //veikia OK
+        static int ZaidziamRaide(string spejimas, string spejamasZodis) 
         {
             if (spejamasZodis.ToUpper().Contains(spejimas.ToUpper()))
             {
@@ -94,7 +94,7 @@ namespace Zaidimas_kartuves
             }
         }
 
-        static string raidesArbaZodzioSpejimas(string spejamasZodis) //reikia pakoreguoti kad neleistu ivesti ilgesnio/trumpesnio zodzio ir jeigu atspetos visos raides reikia uzskaityti laimejima
+        static string raidesArbaZodzioSpejimas(string spejamasZodis)
         {
             string spejimas = string.Empty;
             Console.WriteLine("spėkite raidę arba visą žodį");
@@ -133,7 +133,7 @@ namespace Zaidimas_kartuves
 
         }
 
-        static void ArZaisiteDarKarta() //veikia OK
+        static void ArZaisiteDarKarta() 
         {
             Console.WriteLine("Ar bandysite dar karta?");
             int x = 0;
@@ -157,7 +157,7 @@ namespace Zaidimas_kartuves
             }
         }
 
-        static bool ArRaides(string spejimas) //veikia OK
+        static bool ArRaides(string spejimas) 
         {
             foreach (char raide in spejimas)
             {
@@ -167,7 +167,7 @@ namespace Zaidimas_kartuves
             return true;
         }
 
-        static void SpejamoZodzioVizualizacija(string spejamasZodis) //veikia OK
+        static void SpejamoZodzioVizualizacija(string spejamasZodis) 
         {
             Console.WriteLine($"Spėkite žodį iš {spejamasZodis.Length} raidžių");
             Console.Write("(");
@@ -193,7 +193,7 @@ namespace Zaidimas_kartuves
             Console.WriteLine();
         }
 
-        static string TemosPasirinkimas() //veikia OK
+        static string TemosPasirinkimas() 
         {
             String[] temosString = {"vardai", "miestai", "valstybes", "sportas" };
             Console.WriteLine("Prašome pasirinkti temą: 1. Vardai, 2. Miestai, 3. Valstybės, 4. Sportas");
@@ -217,7 +217,7 @@ namespace Zaidimas_kartuves
         }
 
 
-        static string ZodzioGeneravimas(List<string> zodziuListas) //veikia OK
+        static string ZodzioGeneravimas(List<string> zodziuListas) 
         {
             Random rand = new Random();
             int listoNarioNumeris = rand.Next(0, zodziuListas.Count);
