@@ -204,7 +204,7 @@ namespace Zaidimas_kartuves
                 char temosPasirinkimas = Console.ReadKey().KeyChar;
                 if (int.TryParse(temosPasirinkimas.ToString(), out skaiciukas))
                 {
-                    if (skaiciukas < 1 && skaiciukas > 4)
+                    if (skaiciukas < 1 || skaiciukas > 4)
                     {
                         Console.WriteLine($"Pasirinkimas {skaiciukas}, neatitinka minėtų temų");
                     }
