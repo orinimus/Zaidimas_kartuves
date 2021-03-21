@@ -184,6 +184,7 @@ namespace Zaidimas_kartuves
             Console.Write(" )");
             if (spejamasZodis.Length == visuRaidziuAtspejimoPatikrinimas)
             {
+                Console.WriteLine();
                 Console.WriteLine("---------------------------------------------------------------");
                 Console.WriteLine("Sveikiname, Jūs atspėjote visas raides ir laimėjote šį žaidimą!");
                 Console.WriteLine("---------------------------------------------------------------");
