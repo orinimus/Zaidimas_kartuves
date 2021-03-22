@@ -36,48 +36,58 @@ namespace Zaidimas_kartuves
             string tema = TemosPasirinkimas();
             if (tema == "vardai")
             {
-                ZaistiZaidima(vardai);               
+                ZaistiZaidima(vardai, tema);                          
             }
             else if (tema == "miestai")
             {
-                ZaistiZaidima(miestai);               
+                ZaistiZaidima(miestai, tema);               
             }
             else if (tema == "valstybes")
             {
-                ZaistiZaidima(valstybes);                
+                ZaistiZaidima(valstybes, tema);                
             }
             else
             {
-                ZaistiZaidima(sportas);                
+                ZaistiZaidima(sportas, tema);                
             }
 
             Console.WriteLine();
             
         }
 
-        static void ZaistiZaidima(List<string> likeZodziaiSarase)
+
+        static void ZaistiZaidima(List<string> likeZodziaiSarase, string tema)
         {
             string spejamasZodis = string.Empty;
             int sansai = 0;
-            spejamasZodis = ZodzioGeneravimas(likeZodziaiSarase); //sugeneruojam zodi is vardu saraso
-            spetiZodziai.Add(spejamasZodis); //issaugom sugeneruota zodi speliotu zodziu sarase              
-            Console.WriteLine(kartuves[0]); //isvedam pradini kartuviu vaizda
-            do
+            if (likeZodziaiSarase.Count > 0)
             {
-                SpejamoZodzioVizualizacija(spejamasZodis); // zodzio "uzkodavimas" arba kitaip pradine vizualizacija                    
-                Console.WriteLine($"Jūs jau bandėte spėti šias raides: {String.Join(" ", bandytosRaides)}"); //parašome kokias raides zaidejas jau bande
-                Console.WriteLine("--------------------------------------------------------");
-                bandytosRaides.Add(raidesArbaZodzioSpejimas(spejamasZodis).ToUpper()); //iskvieciam spejimo metoda (ten pasitikrinam ar spejamas visas zodis) ir jeigu spejama raide, ja prisidedam prie bandytu saraso
-                sansai = sansai + ZaidziamRaide(bandytosRaides[bandytosRaides.Count - 1], spejamasZodis); //iskvieciam raides suzaidimo metoda, kuriame patirkinam ar raide yra jei yra perpiesiam vizualizacija, jei nera padidinam sansu kieki
-                Console.WriteLine(kartuves[sansai]);                
-            } while (sansai < 7);
-            if (sansai == 7)
-            {
-                Console.WriteLine("Deje, Jūs išnaudojote visus bandymus ir pralaimėjote šį žaidimą!");
-                ArZaisiteDarKarta();
+                spejamasZodis = ZodzioGeneravimas(likeZodziaiSarase); //sugeneruojam zodi is vardu saraso
+                spetiZodziai.Add(spejamasZodis); //issaugom sugeneruota zodi speliotu zodziu sarase              
+                Console.WriteLine(kartuves[0]); //isvedam pradini kartuviu vaizda
+                do
+                {
+                    SpejamoZodzioVizualizacija(spejamasZodis); // zodzio "uzkodavimas" arba kitaip pradine vizualizacija                    
+                    Console.WriteLine($"Jūs jau bandėte spėti šias raides: {String.Join(" ", bandytosRaides)}"); //parašome kokias raides zaidejas jau bande
+                    Console.WriteLine("--------------------------------------------------------");
+                    bandytosRaides.Add(raidesArbaZodzioSpejimas(spejamasZodis).ToUpper()); //iskvieciam spejimo metoda (ten pasitikrinam ar spejamas visas zodis) ir jeigu spejama raide, ja prisidedam prie bandytu saraso
+                    sansai = sansai + ZaidziamRaide(bandytosRaides[bandytosRaides.Count - 1], spejamasZodis); //iskvieciam raides suzaidimo metoda, kuriame patirkinam ar raide yra jei yra perpiesiam vizualizacija, jei nera padidinam sansu kieki
+                    Console.WriteLine(kartuves[sansai]);
+                } while (sansai < 7);
+                if (sansai == 7)
+                {
+                    Console.WriteLine("Deje, Jūs išnaudojote visus bandymus ir pralaimėjote šį žaidimą!");
+                    ArZaisiteDarKarta();
+                }
             }
+            else
+            
+            {
+                Console.WriteLine($"Jūs sužaidėte visus žodžius iš temos{tema}, prašome pasirinkti kitą temą");
+                Kartuves();
+            }            
 
-        }  
+        }
 
         static int ZaidziamRaide(string spejimas, string spejamasZodis) 
         {
