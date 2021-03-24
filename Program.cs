@@ -46,15 +46,13 @@ namespace Zaidimas_kartuves
             {
                 ZaistiZaidima(valstybes, tema);                
             }
-            else
+            else if (tema == "sportas")
             {
                 ZaistiZaidima(sportas, tema);                
             }
-
             Console.WriteLine();
             
         }
-
 
         static void ZaistiZaidima(List<string> likeZodziaiSarase, string tema)
         {
@@ -80,8 +78,7 @@ namespace Zaidimas_kartuves
                     ArZaisiteDarKarta();
                 }
             }
-            else
-            
+            else            
             {
                 Console.WriteLine($"Jūs sužaidėte visus žodžius iš temos{tema}, prašome pasirinkti kitą temą");
                 Kartuves();
@@ -140,31 +137,30 @@ namespace Zaidimas_kartuves
                 else x = 1;
             }
             return spejimas; 
-
         }
 
         static void ArZaisiteDarKarta() 
         {
             Console.WriteLine("Ar bandysite dar karta?");
-            int x = 0;
+            int x = 0; 
             while (x != 1)
             {
-                string arZaisimeToliau = Console.ReadLine();
-                if (arZaisimeToliau != null && (arZaisimeToliau == "t" || arZaisimeToliau == "T"))
+                string arZaisimToliau = Console.ReadKey().KeyChar.ToString();
+                if (arZaisimToliau.Equals("t", StringComparison.OrdinalIgnoreCase))
                 {
                     x = 1;
                     bandytosRaides.Clear();
                     Kartuves();
                 }
-                else if (arZaisimeToliau != null && (arZaisimeToliau == "n" || arZaisimeToliau == "N"))
+                else if (arZaisimToliau.Equals("n", StringComparison.OrdinalIgnoreCase))
                 {
-                    System.Environment.Exit(1);                    
+                    System.Environment.Exit(1);
                 }
                 else
                 {
-                    Console.Write("Neteisinga įvestis! Prašome įvesti t/T arba n/N");
+                    Console.WriteLine(" - neteisinga įvestis! Prašome įvesti t/T arba n/N");
                 }
-            }
+            }            
         }
 
         static bool ArRaides(string spejimas) 
@@ -221,12 +217,11 @@ namespace Zaidimas_kartuves
                     }
                     else x = 1;
                 }
-                else Console.WriteLine($"neteisinga įvestis, prašome paspausti 1, 2, 3 arba 4");
+                else Console.WriteLine($" - neteisinga įvestis, prašome paspausti 1, 2, 3 arba 4");
             }
             Console.WriteLine($" Jūs pasirinkote temą \"{temosString[skaiciukas-1]}\"");
             return temosString[skaiciukas - 1];
         }
-
 
         static string ZodzioGeneravimas(List<string> zodziuListas) 
         {
