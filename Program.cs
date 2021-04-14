@@ -32,7 +32,14 @@ namespace Zaidimas_kartuves
         static void Kartuves() 
         {
             Console.WriteLine("Žaidimas \"Kartuvės\"");
-            Console.WriteLine($"sužaisti žodžiai: {string.Join(", ",spetiZodziai)}");
+            if (spetiZodziai.Count != 0)
+            {
+                Console.WriteLine($"sužaisti žodžiai: {string.Join(", ", spetiZodziai)}");                
+            }
+            else
+            {
+                Console.WriteLine("Kolkas žodžių dar nebuvo sužaista");
+            }                
             string tema = TemosPasirinkimas();
             if (tema == "vardai")
             {
@@ -65,11 +72,18 @@ namespace Zaidimas_kartuves
                 Console.WriteLine(kartuves[0]); //isvedam pradini kartuviu vaizda
                 do
                 {
-                    SpejamoZodzioVizualizacija(spejamasZodis); // zodzio "uzkodavimas" arba kitaip pradine vizualizacija                    
-                    Console.WriteLine($"Jūs jau bandėte spėti šias raides: {String.Join(" ", bandytosRaides)}"); //parašome kokias raides zaidejas jau bande
+                    SpejamoZodzioVizualizacija(spejamasZodis); // zodzio "uzkodavimas" arba kitaip pradine vizualizacija
+                    if (bandytosRaides.Count != 0)
+                    {
+                        Console.WriteLine($"Jūs jau bandėte spėti šias raides: {String.Join(" ", bandytosRaides)}"); //parašome kokias raides zaidejas jau bande
+                    }
+                    else
+                    {
+                        Console.WriteLine("Kolkas nebandėte nei vienos raidės");
+                    }                    
                     Console.WriteLine("--------------------------------------------------------");
-                    bandytosRaides.Add(raidesArbaZodzioSpejimas(spejamasZodis).ToUpper()); //iskvieciam spejimo metoda (ten pasitikrinam ar spejamas visas zodis) ir jeigu spejama raide, ja prisidedam prie bandytu saraso
-                    sansai = sansai + ZaidziamRaide(bandytosRaides[bandytosRaides.Count - 1], spejamasZodis); //iskvieciam raides suzaidimo metoda, kuriame patirkinam ar raide yra jei yra perpiesiam vizualizacija, jei nera padidinam sansu kieki
+                    bandytosRaides.Add(RaidesArbaZodzioSpejimas(spejamasZodis).ToUpper()); //iskvieciam spejimo metoda (ten pasitikrinam ar spejamas visas zodis) ir jeigu spejama raide, ja prisidedam prie bandytu saraso
+                    sansai += ZaidziamRaide(bandytosRaides[bandytosRaides.Count - 1], spejamasZodis); //iskvieciam raides suzaidimo metoda, kuriame patirkinam ar raide yra jei yra perpiesiam vizualizacija, jei nera padidinam sansu kieki
                     Console.WriteLine(kartuves[sansai]);
                 } while (sansai < 7);
                 if (sansai == 7)
@@ -101,7 +115,7 @@ namespace Zaidimas_kartuves
             }
         }
 
-        static string raidesArbaZodzioSpejimas(string spejamasZodis)
+        static string RaidesArbaZodzioSpejimas(string spejamasZodis)
         {
             string spejimas = string.Empty;
             Console.WriteLine("spėkite raidę arba visą žodį");
@@ -110,31 +124,38 @@ namespace Zaidimas_kartuves
             while (x != 1)
             {
                 spejimas = Console.ReadLine();
-                if (!ArRaides(spejimas))
+                if (!bandytosRaides.Contains(spejimas.ToUpper()))
                 {
-                    Console.WriteLine("Neteisinga įvesti, prašome įvesti raidę arba visą žodį");
+                    if (!ArRaides(spejimas))
+                    {
+                        Console.WriteLine("Neteisinga įvesti, prašome įvesti raidę arba visą žodį");
+                    }
+                    else if (spejimas.Length > 1)
+                    {
+                        if (spejimas.Length != spejamasZodis.Length)
+                        {
+                            Console.WriteLine($"Jūs bandote spėti žodį, tam reikia parašyti {spejamasZodis.Length} raides, o jūs parašėte {spejimas.Length} ");
+                        }
+                        else if (spejimas.ToUpper() == spejamasZodis.ToUpper())
+                        {
+                            Console.WriteLine("--------------------------------------------------------");
+                            Console.WriteLine(" Sveikiname, Jūs atspėjote žodį ir laimėjote šį žaidimą!");
+                            Console.WriteLine("--------------------------------------------------------");
+                            ArZaisiteDarKarta();
+                        }
+                        else
+                        {
+                            Console.WriteLine("Deje, Jūsų spėjimas neteisingas, Jūs pralaimėjote šį žaidimą!");
+                            Console.WriteLine(kartuves[7]);
+                            ArZaisiteDarKarta();
+                        }
+                    }
+                    else x = 1;
                 }
-                else if (spejimas.Length > 1)
+                else
                 {
-                    if (spejimas.Length != spejamasZodis.Length)
-                    {
-                        Console.WriteLine($"Jūs bandote spėti žodį, tam reikia parašyti {spejamasZodis.Length} raides, o jūs parašėte {spejimas.Length} ");
-                    }
-                    else if (spejimas.ToUpper() == spejamasZodis.ToUpper())
-                    {
-                        Console.WriteLine("--------------------------------------------------------");
-                        Console.WriteLine(" Sveikiname, Jūs atspėjote žodį ir laimėjote šį žaidimą!");
-                        Console.WriteLine("--------------------------------------------------------");
-                        ArZaisiteDarKarta();
-                    }
-                    else
-                    {
-                        Console.WriteLine("Deje, Jūsų spėjimas neteisingas, Jūs pralaimėjote šį žaidimą!");
-                        Console.WriteLine(kartuves[7]);
-                        ArZaisiteDarKarta();
-                    }  
-                }
-                else x = 1;
+                    Console.WriteLine($"Jūs jau badėte spėti {spejimas}");
+                }               
             }
             return spejimas; 
         }
