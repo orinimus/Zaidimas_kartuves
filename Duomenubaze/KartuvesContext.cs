@@ -9,8 +9,8 @@ namespace Zaidimas_kartuves.Duomenubaze
 {
     public class KartuvesContext: DbContext
     {
-        public DbSet<Zodis> Zodis { get; set; }
-        public DbSet<Statistika> Statistika { get; set; }
+        public DbSet<Zodis> Zodziai { get; set; }
+        public DbSet<Statistika> Statistikos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

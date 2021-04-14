@@ -224,7 +224,9 @@ namespace Zaidimas_kartuves
         static string TemosPasirinkimas() 
         {
             String[] temosString = {"vardai", "miestai", "valstybes", "sportas" };
-            Console.WriteLine("Prašome pasirinkti temą: 1. Vardai, 2. Miestai, 3. Valstybės, 4. Sportas");
+            
+            
+            Console.WriteLine("Prašome pasirinkti temą: 1. Vardas, 2. Miestas, 3. Valstybė, 4. Sportas, 5. Gyvūnas");
             int x = 0;
             int skaiciukas = 0;
             while (x != 1)
@@ -232,7 +234,7 @@ namespace Zaidimas_kartuves
                 char temosPasirinkimas = Console.ReadKey().KeyChar;
                 if (int.TryParse(temosPasirinkimas.ToString(), out skaiciukas))
                 {
-                    if (skaiciukas < 1 || skaiciukas > 4)
+                    if (skaiciukas < 1 || skaiciukas > 5)
                     {
                         Console.WriteLine($"Pasirinkimas {skaiciukas}, neatitinka minėtų temų");
                     }

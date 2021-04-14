@@ -1,10 +1,13 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Zaidimas_kartuves.Modeliai;
 
 namespace Zaidimas_kartuves.Duomenubaze
 {
-    public class VadybintiKartuviuDb
+    public class VadybintiKartuviuDb : IVadybintiKartuviuDb
     {
         private readonly KartuvesContext _context;
 
@@ -14,5 +17,9 @@ namespace Zaidimas_kartuves.Duomenubaze
             context.Database.EnsureCreated();
         }
 
+        public List<Zodis> GautiVisusZodzius()
+        {
+            return _context.Zodziai.ToList(); 
+        }
     }
 }
