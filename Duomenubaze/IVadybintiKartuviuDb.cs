@@ -5,6 +5,7 @@ namespace Zaidimas_kartuves.Duomenubaze
 {
     public interface IVadybintiKartuviuDb
     {
+        List<Statistika> GautiVisaStatistika();
         List<Zodis> GautiVisusZodzius();
     }
 }

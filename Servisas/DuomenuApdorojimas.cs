@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Zaidimas_kartuves.Duomenubaze;
 using Zaidimas_kartuves.Modeliai;
@@ -27,6 +28,20 @@ namespace Zaidimas_kartuves.Servisas
                 }
             }
             return temuListas;
+        }
+
+        public List<Zodis> LikeZodziaiSarase(string tema)
+        {
+            var visiZodziai = _vadybintiKartuviuDb.GautiVisusZodzius();
+            var temosZodziai = visiZodziai.Where(t => t.Tema == tema).ToList();
+            return temosZodziai;
+        }
+
+        public List<Statistika> ZaidejoStatistika(string zaidejas)
+        {
+            var visaStatistika = _vadybintiKartuviuDb.GautiVisaStatistika();
+            var zaidejoStatistika = visaStatistika.Where(s => s.ZaidejoVardas == zaidejas).ToList();
+            return zaidejoStatistika;
         }
     }
 }

@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Zaidimas_kartuves.Duomenubaze;
+using Zaidimas_kartuves.Modeliai;
+using Zaidimas_kartuves.Servisas;
 
 namespace Zaidimas_kartuves
 {
@@ -17,10 +21,13 @@ namespace Zaidimas_kartuves
                 {6, " ------|\n|      o\n|     \\|/\n|      O\n|     /\n|\n|\n|\n________" },
                 {7, " ------|\n|      o\n|     \\|/\n|      O\n|     / \\\n|\n|\n|\n________" }
             };
+        /*
         static readonly List<string> vardai = new List<string> { "Liutauras", "Dominykas", "Augustas", "Klemensas", "Aloyzas", "Aleksandras", "Marijonas", "Vytautas", "Anzelmas", "Gediminas" };
         static readonly List<string> miestai = new List<string> { "Radviliškis", "Anykščiai", "Mažeikiai", "Virbalis", "Kybartai", "Ignalina", "Kalvarija", "Marijampolė", "Tauragė", "Jurbarkas" };
         static readonly List<string> valstybes = new List<string> { "Argentina", "Brazilija", "Meksika", "Jamaika", "Alžyras", "Albanija", "Tailandas", "Kazakstanas", "Armėnija", "Garikija" };
         static readonly List<string> sportas = new List<string> { "vandensvydis", "biatlonas", "šaškės", "penkiakovė", "maratonas", "futbolas", "beisbolas", "kriketas", "akmensvydis", "šachmatai" };
+        */
+
         static readonly List<string> bandytosRaides = new List<string>();
         static readonly List<string> spetiZodziai = new List<string>();
 
@@ -31,44 +38,70 @@ namespace Zaidimas_kartuves
 
         static void Kartuves() 
         {
-            Console.WriteLine("Žaidimas \"Kartuvės\"");
-            if (spetiZodziai.Count != 0)
+            using (var context = new KartuvesContext())
             {
-                Console.WriteLine($"sužaisti žodžiai: {string.Join(", ", spetiZodziai)}");                
+                IVadybintiKartuviuDb vadybintiKartuviuDb = new VadybintiKartuviuDb(context);
+                IDuomenuApdorojimas duomenuApdorojimas = new DuomenuApdorojimas(vadybintiKartuviuDb);
+                Console.WriteLine("Žaidimas \"Kartuvės\"");
+                string zaidejas = IvestiVarda();
+                ZaidejoStatistika(zaidejas);
+                if (spetiZodziai.Count != 0)
+                {
+                    Console.WriteLine($"sužaisti žodžiai: {string.Join(", ", spetiZodziai)}");
+                }
+                else
+                {
+                    Console.WriteLine("Kolkas žodžių dar nebuvo sužaista");
+                }
+                string tema = TemosPasirinkimas();
+                var likeZodziaiSarase = duomenuApdorojimas.LikeZodziaiSarase(tema);
+                if (tema == "VARDAS")
+                {
+                    ZaistiZaidima(likeZodziaiSarase, tema);
+                }
+                else if (tema == "MIESTAS")
+                {
+                    ZaistiZaidima(likeZodziaiSarase, tema);
+                }
+                else if (tema == "VALSTYBĖ")
+                {
+                    ZaistiZaidima(likeZodziaiSarase, tema);
+                }
+                else if (tema == "SPORTAS")
+                {
+                    ZaistiZaidima(likeZodziaiSarase, tema);
+                }
+                else if (tema == "GYVŪNAS")
+                {
+                    ZaistiZaidima(likeZodziaiSarase, tema);
+                }
+                Console.WriteLine();
             }
-            else
-            {
-                Console.WriteLine("Kolkas žodžių dar nebuvo sužaista");
-            }                
-            string tema = TemosPasirinkimas();
-            if (tema == "vardai")
-            {
-                ZaistiZaidima(vardai, tema);                          
-            }
-            else if (tema == "miestai")
-            {
-                ZaistiZaidima(miestai, tema);               
-            }
-            else if (tema == "valstybes")
-            {
-                ZaistiZaidima(valstybes, tema);                
-            }
-            else if (tema == "sportas")
-            {
-                ZaistiZaidima(sportas, tema);                
-            }
-            Console.WriteLine();
-            
         }
 
-        static void ZaistiZaidima(List<string> likeZodziaiSarase, string tema)
+        private static void ZaidejoStatistika(string zaidejas)
+        {
+            using (var context = new KartuvesContext())
+            {
+                IVadybintiKartuviuDb vadybintiKartuviuDb = new VadybintiKartuviuDb(context);
+                IDuomenuApdorojimas duomenuApdorojimas = new DuomenuApdorojimas(vadybintiKartuviuDb);
+
+                Console.WriteLine($"Žaidėjo {zaidejas} statistika: ");
+                var zaidejoStatistika = duomenuApdorojimas.ZaidejoStatistika(zaidejas);
+                var kiekKartuSpeta = zaidejoStatistika.Sum(s => s.KiekKartuSpeta);                
+                Console.WriteLine($"spėta {kiekKartuSpeta} kartų" );
+            }         
+
+        }
+
+        static void ZaistiZaidima(List<Zodis> likeZodziaiSarase, string tema)
         {
             string spejamasZodis = string.Empty;
             int sansai = 0;
             if (likeZodziaiSarase.Count > 0)
             {
-                spejamasZodis = ZodzioGeneravimas(likeZodziaiSarase); //sugeneruojam zodi is vardu saraso
-                spetiZodziai.Add(spejamasZodis); //issaugom sugeneruota zodi speliotu zodziu sarase              
+                spejamasZodis = ZodzioGeneravimas(likeZodziaiSarase); //sugeneruojam zodi is Zodziu duombazes OK
+                spetiZodziai.Add(spejamasZodis); //------------------issaugom sugeneruota zodi speliotu zodziu sarase              
                 Console.WriteLine(kartuves[0]); //isvedam pradini kartuviu vaizda
                 do
                 {
@@ -221,38 +254,56 @@ namespace Zaidimas_kartuves
             Console.WriteLine();
         }
 
-        static string TemosPasirinkimas() 
+        static string IvestiVarda()
         {
-            String[] temosString = {"vardai", "miestai", "valstybes", "sportas" };
-            
-            
-            Console.WriteLine("Prašome pasirinkti temą: 1. Vardas, 2. Miestas, 3. Valstybė, 4. Sportas, 5. Gyvūnas");
-            int x = 0;
-            int skaiciukas = 0;
-            while (x != 1)
-            {
-                char temosPasirinkimas = Console.ReadKey().KeyChar;
-                if (int.TryParse(temosPasirinkimas.ToString(), out skaiciukas))
-                {
-                    if (skaiciukas < 1 || skaiciukas > 5)
-                    {
-                        Console.WriteLine($"Pasirinkimas {skaiciukas}, neatitinka minėtų temų");
-                    }
-                    else x = 1;
-                }
-                else Console.WriteLine($" - neteisinga įvestis, prašome paspausti 1, 2, 3 arba 4");
-            }
-            Console.WriteLine($" Jūs pasirinkote temą \"{temosString[skaiciukas-1]}\"");
-            return temosString[skaiciukas - 1];
+            Console.WriteLine("Įveskite žaidėjo vardą: ");
+            string zaidejas = Console.ReadLine();
+            return zaidejas;            
         }
 
-        static string ZodzioGeneravimas(List<string> zodziuListas) 
+        static string TemosPasirinkimas() 
+        {
+            using (var context = new KartuvesContext())
+            {
+                IVadybintiKartuviuDb vadybintiKartuviuDb = new VadybintiKartuviuDb(context);
+                IDuomenuApdorojimas duomenuApdorojimas = new DuomenuApdorojimas(vadybintiKartuviuDb);
+                int i = 1;
+                var temuSarasas = duomenuApdorojimas.TemuIsvedimas(); //parnesa iš zodziu duombazes unikaliu temu sarasa
+                Console.Write("Prašome pasirinkti temą: ");
+
+                foreach (var tema in temuSarasas) 
+                {
+                    Console.Write($"{i}. {tema} ");
+                    i += 1;
+                }
+                Console.WriteLine();
+                int x = 0;
+                int skaiciukas = 0;
+                while (x != 1)
+                {
+                    char temosPasirinkimas = Console.ReadKey().KeyChar;
+                    if (int.TryParse(temosPasirinkimas.ToString(), out skaiciukas))
+                    {
+                        if (skaiciukas < 1 || skaiciukas > 5)
+                        {
+                            Console.WriteLine($"Pasirinkimas {skaiciukas}, neatitinka minėtų temų");
+                        }
+                        else x = 1;
+                    }
+                    else Console.WriteLine($" - neteisinga įvestis, prašome paspausti 1, 2, 3, 4 arba 5");
+                }
+                Console.WriteLine($" Jūs pasirinkote temą \"{temuSarasas[skaiciukas - 1]}\"");
+                return temuSarasas[skaiciukas - 1];
+            }           
+        }
+
+        static string ZodzioGeneravimas(List<Zodis> zodziuListas) 
         {
             Random rand = new Random();
             int listoNarioNumeris = rand.Next(0, zodziuListas.Count);
             var zodis = zodziuListas[listoNarioNumeris];
             zodziuListas.RemoveAt(listoNarioNumeris);
-            return zodis;
+            return zodis.Zodelis;
         }
 
     }

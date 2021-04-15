@@ -21,5 +21,10 @@ namespace Zaidimas_kartuves.Duomenubaze
         {
             return _context.Zodziai.ToList(); 
         }
+
+        public List<Statistika> GautiVisaStatistika()
+        {
+            return _context.Statistikos.ToList();
+        }
     }
 }
