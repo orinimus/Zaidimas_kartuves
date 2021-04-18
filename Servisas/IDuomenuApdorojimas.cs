@@ -5,8 +5,9 @@ namespace Zaidimas_kartuves.Servisas
 {
     public interface IDuomenuApdorojimas
     {
-        List<Zodis> LikeZodziaiSarase(string tema);
+        List<Zodis> LikeTemosZodziai(string tema, List<Zodis> suzaistiTemosZodziai);
         List<string> TemuIsvedimas();
+        List<Zodis> VisiZodziai();
         List<Statistika> ZaidejoStatistika(string zaidejas);
     }
 }

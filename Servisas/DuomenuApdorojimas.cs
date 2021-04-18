@@ -30,12 +30,30 @@ namespace Zaidimas_kartuves.Servisas
             return temuListas;
         }
 
-        public List<Zodis> LikeZodziaiSarase(string tema)
+        public List<Zodis> VisiZodziai()
+        {
+            var visiZodziai = _vadybintiKartuviuDb.GautiVisusZodzius();
+            return visiZodziai;
+        }
+
+        
+        public List<Zodis> LikeTemosZodziai(string tema, List<Zodis> suzaistiTemosZodziai) //geriau pavadinti LikeTemosZodziai
         {
             var visiZodziai = _vadybintiKartuviuDb.GautiVisusZodzius();
             var temosZodziai = visiZodziai.Where(t => t.Tema == tema).ToList();
+            foreach (var temosZodis in temosZodziai)
+            {
+                foreach (var suzaistasTemosZodis in suzaistiTemosZodziai)
+                {
+                    if (temosZodis.Tema == suzaistasTemosZodis.Tema)
+                    {
+                        temosZodziai.Remove(temosZodis);
+                        break;
+                    }
+                }
+            }
             return temosZodziai;
-        }
+        }        
 
         public List<Statistika> ZaidejoStatistika(string zaidejas)
         {

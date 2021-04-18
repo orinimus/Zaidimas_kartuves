@@ -7,5 +7,6 @@ namespace Zaidimas_kartuves.Duomenubaze
     {
         List<Statistika> GautiVisaStatistika();
         List<Zodis> GautiVisusZodzius();
+        void PapildytiStatistika(string zaidejas, int sansai, bool arAtspejo, int zodzioId);
     }
 }

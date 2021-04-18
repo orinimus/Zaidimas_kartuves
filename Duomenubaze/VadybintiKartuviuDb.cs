@@ -26,5 +26,13 @@ namespace Zaidimas_kartuves.Duomenubaze
         {
             return _context.Statistikos.ToList();
         }
+
+        public void PapildytiStatistika(string zaidejas, int sansai, bool arAtspejo, int zodzioId)
+        {
+            _context.Statistikos.Add(new Statistika { ZaidejoVardas = zaidejas, ZodisId = zodzioId, KiekKartuSpeta = sansai, ArAtspejo = arAtspejo, KadaZaide = DateTime.Now });
+            _context.SaveChanges();
+
+        }
+
     }
 }
